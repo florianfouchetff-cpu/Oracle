@@ -329,8 +329,17 @@ function(a,b,c){if(!Vd(b))throw Error(m(200));return Wd(null,a,b,!1,c)};Q.unmoun
 var R = window.React, RD = window.ReactDOM;
 var useState = R.useState, useRef = R.useRef, useMemo = R.useMemo, useEffect = R.useEffect;
 var __jsx_frag = R.Fragment;
+// fix #137 (2026-11-14) : un element vide HTML (input, img, br...) ne doit jamais
+// recevoir d'enfants. React de production le refuse (Minified React error #137)
+// alors que le harnas le tolerait. Deux gardes, dans l'ordre :
+//   1. element vide => jamais d'enfants, quoi qu'il arrive ;
+//   2. children null ou [] => createElement SANS troisieme argument (React
+//      refuse aussi un tableau vide sur un element vide).
+var __jsx_void = {input:1, img:1, br:1, hr:1, area:1, base:1, col:1, embed:1, source:1, track:1, wbr:1};
 function __jsx_h(tag, props, children) {
-  return R.createElement(tag, props || {}, children == null ? [] : children);
+  if (typeof tag === 'string' && __jsx_void[tag]) return R.createElement(tag, props || {});
+  if (children == null || (Array.isArray(children) && children.length === 0)) return R.createElement(tag, props || {});
+  return R.createElement(tag, props || {}, children);
 }
 
 // ===== Données : prototype Delphes RK4-G7, profil THÉORIQUE (EXEMPLE) =====
