@@ -17,3 +17,5 @@ Validation du canvas source : B6 107, 82 suites 2200 PASS, 12 scénarios 845, 48
 
 ## Reconstruire après chaque version du canvas
 python3 build_standalone.py (depuis le dossier pythie) puis re-pousser dist/.
+Le sceau (empreinte du shell) est inscrit dans sw.js : tout changement du shell
+re-installe le worker chez le tireur et rafraichit le cache, rien a faire d'autre.
