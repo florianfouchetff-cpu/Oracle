@@ -1,0 +1,29 @@
+name: icones Pythie
+# Regener les icones de l'app (icon-180/192/512.png) depuis le generateur deterministe
+# tools/gen_icon.mjs (pur Node, aucune dependance). Se declenche quand le generateur
+# ou ce fichier change ; declenchement manuel possible depuis l'onglet Actions.
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/gen-icons.yml', 'tools/gen_icon.mjs']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  icones:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: generation
+        run: node tools/gen_icon.mjs .
+      - name: commit si changement
+        run: |
+          git config user.name "pythie-actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add icon-180.png icon-192.png icon-512.png
+          if git diff --cached --quiet; then
+            echo "icones inchangees"
+          else
+            git commit -m "icones Pythie (generees par tools/gen_icon.mjs)"
+            git push
+          fi
