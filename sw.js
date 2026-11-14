@@ -1,12 +1,12 @@
-// Pythie standalone v0.80 · build 2026-11-14 · shell 1de7b7a4eb47
+// Pythie standalone v0.80 · build 2026-11-14 · shell 885703c2d66f
 // Doctrine du sceau (leçon 2026-11-14) : le shell est cache-first ; sans sceau, un
 // index.html corrige mais un sw.js identique au bit près ne serait jamais re-installe
 // et le telephone servirait l'ancien shell pour toujours. Le sceau = empreinte du shell :
 // toute modification du shell change BUILD, donc sw.js, donc le worker se re-installe
 // au prochain passage, rafraichit le cache (skipWaiting + clients.claim) et supprime
 // les anciens caches au activate.
-const CACHE = 'pythie-v0.80-1de7b7a4eb47';
-const ASSETS = ['./', './index.html', './manifest.webmanifest'];
+const CACHE = 'pythie-v0.80-885703c2d66f';
+const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png'];
 self.addEventListener('install', e => e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting())));
 self.addEventListener('activate', e => e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim())));
 // Doctrine : le service worker ne touche que le shell same-origin en GET ;

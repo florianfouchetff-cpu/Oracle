@@ -15,6 +15,13 @@ Validation du canvas source : B6 107, 82 suites 2200 PASS, 12 scénarios 845, 48
 - Offline : le shell est caché au premier chargement ; l'app démarre sans réseau
   (doctrine intacte : offline-first, le réseau n'est jamais présumé).
 
+## Icône « l'œil cible »
+Iris en cible à anneaux, point rouge du collimateur au centre, amande d'œil,
+fond sombre de l'app. Générée par tools/gen_icon.mjs (pur Node, aucune
+dépendance, déterministe) ; la GitHub Action gen-icons.yml la régénère et la
+commet automatiquement à chaque changement du générateur. icon-180.png sert à
+l'écran d'accueil iOS, icon-192 et icon-512 au manifeste PWA.
+
 ## Reconstruire après chaque version du canvas
 python3 build_standalone.py (depuis le dossier pythie) puis re-pousser dist/.
 Le sceau (empreinte du shell) est inscrit dans sw.js : tout changement du shell
