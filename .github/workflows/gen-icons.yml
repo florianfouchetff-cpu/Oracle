@@ -1,7 +1,7 @@
 name: icones Pythie + Pythie Lite
 # Regener les icones des apps (icon-180/192/512.png) depuis les generateurs
 # deterministes tools/gen_icon.mjs (Pythie, l'oeil cible) et tools/gen_icon_lite.mjs
-# (Pythie Lite, Apollon solaire) - pur Node, aucune dependance. Se declenche quand
+# (Pythie Lite, P L sur fond bleu clair) - pur Node, aucune dependance. Se declenche quand
 # un generateur ou ce fichier change ; declenchement manuel possible depuis
 # l'onglet Actions.
 on:

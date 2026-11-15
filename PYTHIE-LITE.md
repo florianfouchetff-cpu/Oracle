@@ -1,9 +1,9 @@
-# Pythie Lite · app autonome (v0.4.2)
+# Pythie Lite · app autonome (v0.4.3)
 
-Build : 2026-11-15. Source de vérité : le canvas pythie-lite-v01 (v0.4.2),
+Build : 2026-11-15. Source de vérité : le canvas pythie-lite-v01 (v0.4.3),
 compilé sans modification du code (Babel JSX classique, React 18 UMD inline,
 Tailwind 3.4 compilé au build, aucune dépendance au réseau ni au CDN).
-Validation du build standalone : 46 PASS, 0 échec (moteur .308 V0 790 / BC G7 0,243
+Validation du build standalone : 50 PASS, 0 échec (moteur .308 V0 790 / BC G7 0,243
 / zéro 200 m : 15,6 MOA et 521 m/s à 600 m ; 39,3 MOA, 376 m/s, ToF 1,84 s, Mach 1,10
 à 1000 m ; zéro 50 m : zéro exact à 50 m, 2,3 mrad à 300 m ; site +20° : gravité
 apparente ; vent travers 4 m/s à 600 m = 1,17 mrad, moteur et règle du retard
@@ -71,3 +71,17 @@ tireur et rafraîchit le cache, rien à faire d'autre.
 - Plus de bandeau de migration v0.4 (demande du tireur : appli finale). La
   conversion v2 → v3 reste au chargement, registres préservés ; les refus
   honnêtes (version inconnue, entrées v0.1) restent dits.
+
+## V₀ de la page TIR (v0.4.3)
+- À l'ouverture de la page TIR, la vitesse du tir reprend celle de la cartouche
+  active du setup (une seule écriture, au montage : jamais en cours de saisie).
+  Le champ reste ajustable au doigt ; la note dit la provenance (reprise de la
+  cartouche ou ajustée au doigt).
+
+## Icône « P L » (v0.4.3)
+- L'icône Pythie Lite est désormais un P et un L sombres sur fond bleu clair
+  (demande du tireur ; l'Apollon solaire reste consigné en réserve historique).
+  Régénérée par tools/gen_icon_lite.mjs via le workflow gen-icons.yml.
+- Note iOS : l'app installée garde parfois l'ancienne icône en cache ; si le
+  nouveau P L n'apparaît pas, retirer l'app de l'écran d'accueil puis la
+  ré-ajouter depuis Safari.

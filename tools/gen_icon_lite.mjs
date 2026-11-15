@@ -1,49 +1,41 @@
-// gen_icon_lite.mjs : icône Pythie Lite « Apollon solaire » (la piste consignée
-// en réserve d'icône dès l'arbitrage L-ARB-1 : identité propre, distincte de
-// l'œil cible de Pythie). Disque solaire, douze rayons comme la rosace des
-// heures de la page TIR, accent cyan de Pythie Lite, fond sombre de l'app.
-// Pur Node (zlib), aucune dépendance : même sortie au bit près partout.
+// gen_icon_lite.mjs : icône Pythie Lite « P L sur fond bleu clair » (demande du
+// tireur, L-ARB-15 : le P de Pythie est sur fond noir, le P L de Lite est sur
+// fond bleu clair ; l'« Apollon solaire » à douze rayons, consommé depuis
+// L-ARB-1, reste consigné en réserve historique). Lettres géométriques sombres
+// sur fond bleu clair, même encodage PNG maison (zlib), aucune dépendance :
+// même sortie au bit près partout.
 // Usage : node gen_icon_lite.mjs [outdir]   (par défaut : répertoire courant)
 // Écrit : icon-180.png (écran d'accueil iOS), icon-192.png, icon-512.png (PWA).
 import zlib from "node:zlib";
 import fs from "node:fs";
 import path from "node:path";
 
-// --- géométrie (coordonnées unitaires, centre 0.5/0.5) ---
-const DISC = 0.150;                                  // disque solaire
-const RAY_IN = 0.200, RAY_OUT = 0.300, RAY_HW = 0.011; // douze rayons, rosace des heures
-const RING_IN = 0.055, RING_OUT = 0.078;             // anneau sombre interne (réticule)
-const DOT = 0.040, GLOW = 0.210, GLOW_A = 0.16;      // centre + halo
-const N_RAYONS = 12;                                 // 12 h de la rosace
+// --- géométrie (coordonnées unitaires, lettres en traits rectangulaires) ---
+const W = 0.09;                 // épaisseur de trait
+const T = 0.20, B = 0.80;        // sommet et pied des lettres
+// P : fût + panse fermée (barre haute, flanc droit, barre médiane)
+const P = [
+  [0.13, T, 0.13 + W, B],        // fût
+  [0.13, T, 0.47, T + W],        // barre haute
+  [0.47 - W, T, 0.47, 0.53],     // flanc droit de la panse
+  [0.13, 0.53 - W, 0.47, 0.53],  // barre médiane
+];
+// L : fût + pied
+const L = [
+  [0.55, T, 0.55 + W, B],        // fût
+  [0.55, B - W, 0.87, B],        // pied
+];
 
 // --- couleurs (langage Tailwind de l'app) ---
-const BG_IN = [13, 27, 42], BG_OUT = [2, 6, 23];  // dégradé radial slate
-const CYAN = [34, 211, 238];                        // cyan-400, accent de Pythie Lite
-const DARK = [2, 6, 23];                            // slate-950, anneau interne
+const BG = [186, 230, 253];      // sky-200, « fond bleu clair » du tireur
+const LETTRE = [2, 6, 23];      // slate-950, le sombre de l'app
 
+function dans(x, y, rects) {
+  for (const [x0, y0, x1, y1] of rects) if (x >= x0 && x <= x1 && y >= y0 && y <= y1) return true;
+  return false;
+}
 function shade(x, y) {
-  const dx = x - 0.5, dy = y - 0.5;
-  const gd = Math.hypot(dx, dy);
-  const d = Math.min(1, gd / 0.7071);
-  let c = [BG_IN[0] + (BG_OUT[0] - BG_IN[0]) * d, BG_IN[1] + (BG_OUT[1] - BG_IN[1]) * d, BG_IN[2] + (BG_OUT[2] - BG_IN[2]) * d];
-  if (gd <= GLOW) { // halo du disque (sous les rayons)
-    const a = GLOW_A * (1 - gd / GLOW);
-    c = [c[0] + (CYAN[0] - c[0]) * a, c[1] + (CYAN[1] - c[1]) * a, c[2] + (CYAN[2] - c[2]) * a];
-  }
-  // rayons : angle horaire de la rosace (12 h en haut)
-  const th = Math.atan2(dx, -dy); // 0 = 12 h, croissant horaire
-  for (let i = 0; i < N_RAYONS; i++) {
-    const a = (i * 2 * Math.PI) / N_RAYONS;
-    let da = th - a;
-    while (da > Math.PI) da -= 2 * Math.PI;
-    while (da < -Math.PI) da += 2 * Math.PI;
-    const dist = Math.abs(da) * gd; // distance latérale à l'axe du rayon
-    if (gd >= RAY_IN && gd <= RAY_OUT && dist <= RAY_HW) c = CYAN;
-  }
-  if (gd <= DISC) c = CYAN;
-  if (gd >= RING_IN && gd <= RING_OUT) c = DARK;
-  if (gd <= DOT) c = CYAN;
-  return c;
+  return dans(x, y, P) || dans(x, y, L) ? LETTRE : BG;
 }
 
 function render(size, ss) {
@@ -68,28 +60,18 @@ function render(size, ss) {
 
 // aperçu ASCII (contrôle de géométrie sans visionneuse)
 function preview() {
-  const W = 72, H = 36;
+  const Wp = 72, H = 40;
   for (let row = 0; row < H; row++) {
     let line = "";
-    for (let col = 0; col < W; col++) {
-      const x = (col + 0.5) / W, y = (row + 0.5) / H;
-      const dx = x - 0.5, dy = y - 0.5, gd = Math.hypot(dx, dy);
-      const th = Math.atan2(dx, -dy);
-      let rayon = false;
-      for (let i = 0; i < N_RAYONS; i++) {
-        const a = (i * 2 * Math.PI) / N_RAYONS;
-        let da = th - a;
-        while (da > Math.PI) da -= 2 * Math.PI;
-        while (da < -Math.PI) da += 2 * Math.PI;
-        if (gd >= RAY_IN && gd <= RAY_OUT && Math.abs(da) * gd <= RAY_HW * 1.6) rayon = true;
-      }
-      line += gd <= DOT ? "O" : (gd >= RING_IN && gd <= RING_OUT) ? " " : (gd <= DISC ? "#" : (rayon ? "|" : (gd <= GLOW ? "·" : " ")));
+    for (let col = 0; col < Wp; col++) {
+      const x = (col + 0.5) / Wp, y = (row + 0.5) / H;
+      line += dans(x, y, P) || dans(x, y, L) ? "#" : ".";
     }
     console.log(line);
   }
 }
 
-// --- PNG : encodeur maison (RGBA 8 bits, filtre 0 par ligne) ---
+// --- PNG : encodeur maison (RGB 8 bits, filtre 0 par ligne) ---
 const CRC_T = (() => { const t = new Int32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = (c & 1) ? (0xedb88320 ^ (c >>> 1)) : (c >>> 1); t[n] = c; } return t; })();
 function crc32(buf) { let c = -1; for (let i = 0; i < buf.length; i++) c = CRC_T[(c ^ buf[i]) & 0xff] ^ (c >>> 8); return (c ^ -1) >>> 0; }
 function chunk(type, data) {

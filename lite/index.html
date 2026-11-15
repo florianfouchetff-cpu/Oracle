@@ -1,6 +1,6 @@
 <!doctype html>
-<!-- Pythie Lite v0.4.2 · build 2026-11-15 · standalone offline-first -->
-<!-- Source de vérité : le canvas pythie-lite-v01 (v0.4.2), compilé sans modification du code -->
+<!-- Pythie Lite v0.4.3 · build 2026-11-15 · standalone offline-first -->
+<!-- Source de vérité : le canvas pythie-lite-v01 (v0.4.3), compilé sans modification du code -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
@@ -320,7 +320,7 @@ function(a,b,c){if(!Vd(b))throw Error(m(200));return Wd(null,a,b,!1,c)};Q.unmoun
 
 
 // ============================================================
-// PYTHIE LITE v0.4.2 — le calcul au tir, théorique et autoporté
+// PYTHIE LITE v0.4.3 — le calcul au tir, théorique et autoporté
 // Structure Pythie : ACCUEIL (setup, cartouche, paramètres) et
 // page TIR aux conventions maison (rosace, correction en clics
 // + = corriger à droite, acquisition météo aux modes maison,
@@ -332,6 +332,8 @@ function(a,b,c){if(!Vd(b))throw Error(m(200));return Wd(null,a,b,!1,c)};Q.unmoun
 // web (déclaré) ou se tape au doigt dans l'encart (manuel).
 // v0.4.2 : l'encart CORRECTION passe au-dessus de la rosace,
 // plus de bandeau de migration v0.4 (appli finale, décision du tireur).
+// v0.4.3 : à l'ouverture de la page TIR, la vitesse du tir reprend
+// celle de la cartouche active du setup.
 // Aucun recours à Delphes, aucun tir archivé, aucune analyse.
 // Moteur : masse ponctulaire, traînée standard via BC (G1/G7),
 // vent 3D, gravité apparente selon le site, Coriolis si lat/az.
@@ -341,7 +343,7 @@ function(a,b,c){if(!Vd(b))throw Error(m(200));return Wd(null,a,b,!1,c)};Q.unmoun
 
 const SCHEMA_V = 3;
 const LS_KEY = "pythieLite";
-const APP_VERSION = "Pythie Lite v0.4.2";
+const APP_VERSION = "Pythie Lite v0.4.3";
 
 // ---------- tables de traînée standard approchées (Cd vs Mach) ----------
 const CD_G1 = [[0, 0.1189], [0.8, 0.1189], [0.86, 0.176], [0.9, 0.224], [0.95, 0.291], [1.0, 0.339], [1.05, 0.372], [1.1, 0.384], [1.2, 0.389], [1.3, 0.384], [1.5, 0.353], [2, 0.282], [2.5, 0.257], [3, 0.237], [4, 0.206], [5, 0.194], [6, 0.19]];
@@ -1225,6 +1227,20 @@ function Tir({
     }
   });
 
+  // v0.4.3 : à l'ouverture de la page, la vitesse du tir est celle de la
+  // cartouche active du setup (le tireur ajuste ensuite au doigt s'il veut).
+  // Une seule fois, au montage de la page : jamais en cours de saisie.
+  useEffect(() => {
+    if (ca && tir.v0 !== ca.v0) setReg({
+      ...reg,
+      tir: {
+        ...tir,
+        v0: ca.v0
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // capteurs d'orientation : la permission iOS ne se demande que dans le geste,
   // le capteur propose en continu, le tireur règle (doctrine maison)
   async function ouvrirVoileCapteur(cible) {
@@ -1464,7 +1480,7 @@ function Tir({
     onClick: () => setT("dist")(String(d))
   }, d, " m"))), /*#__PURE__*/React.createElement("div", {
     className: "text-[10px] text-slate-500 mt-1"
-  }, tir.v0 ? "V₀ ajustée au doigt (théorique, jamais qualifiée)" : ca ? "V₀ de la cartouche (théorique, ajustable)" : "", " \xB7 z\xE9ro du setup actif ", su && su.zero || "—", " m")), /*#__PURE__*/React.createElement("div", {
+  }, ca && tir.v0 === ca.v0 ? "V₀ de la cartouche active, reprise à l'ouverture (théorique, ajustable)" : tir.v0 ? "V₀ ajustée au doigt (théorique, jamais qualifiée)" : "", " \xB7 z\xE9ro du setup actif ", su && su.zero || "—", " m")), /*#__PURE__*/React.createElement("div", {
     className: "rounded-xl bg-slate-900 p-4 mb-2 border border-cyan-500/50"
   }, /*#__PURE__*/React.createElement("div", {
     className: "text-[13px] font-bold text-slate-100 mb-2"
@@ -1775,6 +1791,7 @@ function App() {
 }
 const { useState, useEffect, useMemo } = React;
 ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
+</script>
 </script>
 </script>
 </script>
