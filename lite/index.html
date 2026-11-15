@@ -1,6 +1,6 @@
 <!doctype html>
-<!-- Pythie Lite v0.4 · build 2026-11-15 · standalone offline-first -->
-<!-- Source de vérité : le canvas pythie-lite-v01 (v0.4), compilé sans modification du code -->
+<!-- Pythie Lite v0.4.1 · build 2026-11-15 · standalone offline-first -->
+<!-- Source de vérité : le canvas pythie-lite-v01 (v0.4.1), compilé sans modification du code -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
@@ -316,8 +316,10 @@ var d=null!=c&&c.hydratedSources||null,e=!1,f="",g=aj;null!==c&&void 0!==c&&(!0=
 function(a,b,c){if(!Vd(b))throw Error(m(200));return Wd(null,a,b,!1,c)};Q.unmountComponentAtNode=function(a){if(!Vd(a))throw Error(m(40));return a._reactRootContainer?(yb(function(){Wd(null,null,a,!1,function(){a._reactRootContainer=null;a[Ja]=null})}),!0):!1};Q.unstable_batchedUpdates=Tf;Q.unstable_renderSubtreeIntoContainer=function(a,b,c,d){if(!Vd(c))throw Error(m(200));if(null==a||void 0===a._reactInternals)throw Error(m(38));return Wd(a,b,c,!1,d)};Q.version="18.3.1-next-f1338f8080-20240426"});
 })();
 </script>
-<script>// ============================================================
-// PYTHIE LITE v0.4 — le calcul au tir, théorique et autoporté
+<script>
+
+// ============================================================
+// PYTHIE LITE v0.4.1 — le calcul au tir, théorique et autoporté
 // Structure Pythie : ACCUEIL (setup, cartouche, paramètres) et
 // page TIR aux conventions maison (rosace, correction en clics
 // + = corriger à droite, acquisition météo aux modes maison,
@@ -325,15 +327,19 @@ function(a,b,c){if(!Vd(b))throw Error(m(200));return Wd(null,a,b,!1,c)};Q.unmoun
 // inclinomètre pour l'angle de site, lus au canon, mesure brute).
 // v0.4 : le zéro vit au setup (migration déclarée v2 → v3),
 // il se règle à partir de 50 m.
+// v0.4.1 : plus de notion Kestrel — la météo se prend au
+// web (déclaré) ou se tape au doigt dans l'encart (manuel).
 // Aucun recours à Delphes, aucun tir archivé, aucune analyse.
 // Moteur : masse ponctulaire, traînée standard via BC (G1/G7),
 // vent 3D, gravité apparente selon le site, Coriolis si lat/az.
 // Gyroscopique : non calculée en v0.2 (Miller à verrouiller).
 // Théorique, jamais qualifié, jamais source de truing.
 // ============================================================
+
 const SCHEMA_V = 3;
 const LS_KEY = "pythieLite";
-const APP_VERSION = "Pythie Lite v0.4";
+const APP_VERSION = "Pythie Lite v0.4.1";
+
 // ---------- tables de traînée standard approchées (Cd vs Mach) ----------
 const CD_G1 = [[0, 0.1189], [0.8, 0.1189], [0.86, 0.176], [0.9, 0.224], [0.95, 0.291], [1.0, 0.339], [1.05, 0.372], [1.1, 0.384], [1.2, 0.389], [1.3, 0.384], [1.5, 0.353], [2, 0.282], [2.5, 0.257], [3, 0.237], [4, 0.206], [5, 0.194], [6, 0.19]];
 const CD_G7 = [[0, 0.1198], [0.8, 0.1198], [0.86, 0.133], [0.9, 0.164], [0.95, 0.229], [1.0, 0.288], [1.1, 0.3], [1.2, 0.304], [1.3, 0.298], [1.5, 0.278], [2, 0.24], [2.5, 0.214], [3, 0.195], [4, 0.17], [5, 0.156], [6, 0.148]];
@@ -359,6 +365,7 @@ function airState(T, P, H) {
     a: 331.3 * Math.sqrt(Tk / 273.15)
   };
 }
+
 // ---------- la trajectoire (masse ponctulaire, d = oblique du télémètre) ----------
 function trajectoire(e, avecVent) {
   const tab = e.modele === "G7" ? CD_G7 : CD_G1;
@@ -427,6 +434,7 @@ function trajectoire(e, avecVent) {
     aSon: air.a
   };
 }
+
 // ---------- petites maisons ----------
 function num(s) {
   const v = parseFloat(String(s).replace(",", "."));
@@ -455,6 +463,7 @@ function errTxtGPS(e) {
   if (e && e.code === 3) return "TIMEOUT · « " + m + " »";
   return "GPS indisponible : « " + (m || String(e)) + " »";
 }
+
 // ---------- boussole et inclinomètre (mesure brute, jamais devinée) ----------
 // Doctrine de la visée (Pythie) : téléphone à la bouche du canon, écran vers le
 // ciel, haut vers la cible, aligné sur l'axe du tir. Dans cette posture, la
@@ -588,6 +597,7 @@ function charge() {
     };
   }
 }
+
 // ---------- composants ----------
 function Btn({
   children,
@@ -725,7 +735,9 @@ function Rose({
     textAnchor: "middle"
   }, "m/s \xB7 ", h, " h"));
 }
+
 // ---------- écrans ----------
+
 function Accueil({
   reg,
   go
@@ -1198,12 +1210,6 @@ function Tir({
   const ca = reg.cartouches.find(c => c.id === reg.prefs.selCart);
   const clic = su && su.clic ? su.clic : 0.1;
   const [voile, setVoile] = useState(null);
-  const [modeMeteo, setModeMeteo] = useState(1);
-  const [kestrel, setKestrel] = useState({
-    T: "",
-    H: "",
-    P: ""
-  });
   const [gpsMsg, setGpsMsg] = useState(null);
   const [webMsg, setWebMsg] = useState(null);
   const [sens, setSens] = useState(null);
@@ -1215,6 +1221,7 @@ function Tir({
       [k]: v
     }
   });
+
   // capteurs d'orientation : la permission iOS ne se demande que dans le geste,
   // le capteur propose en continu, le tireur règle (doctrine maison)
   async function ouvrirVoileCapteur(cible) {
@@ -1662,61 +1669,7 @@ function Tir({
   }, "\u2190 ACCUEIL"), voile === "meteo" && /*#__PURE__*/React.createElement(Voile, {
     titre: "ACQUISITION M\xC9T\xC9O",
     onClose: () => setVoile(null)
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "flex gap-2 mb-3"
-  }, /*#__PURE__*/React.createElement(Btn, {
-    kind: modeMeteo === 1 ? "main" : "ghost",
-    onClick: () => setModeMeteo(1)
-  }, "1 \xB7 KESTREL (SAISIE)"), /*#__PURE__*/React.createElement(Btn, {
-    kind: modeMeteo === 2 ? "main" : "ghost",
-    onClick: () => setModeMeteo(2)
-  }, "2 \xB7 WEB (D\xC9CLAR\xC9)")), modeMeteo === 1 ? /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-    className: "text-[11px] text-slate-400 mb-2"
-  }, "Saisie assist\xE9e dans l'ordre de lecture : temp\xE9rature, humidit\xE9, pression station. Le relev\xE9 se lit sur l'\xE9cran de la station m\xE9t\xE9o de tir et se tape ici. Provenance \xAB Kestrel (saisie) \xBB."), /*#__PURE__*/React.createElement("div", {
-    className: "grid grid-cols-3 gap-x-3"
-  }, /*#__PURE__*/React.createElement(Champ, {
-    label: "TEMP (\xB0C)",
-    value: kestrel.T,
-    onChange: v => setKestrel({
-      ...kestrel,
-      T: v
-    }),
-    kbd: "decimal"
-  }), /*#__PURE__*/React.createElement(Champ, {
-    label: "HUMIDIT\xC9 (%)",
-    value: kestrel.H,
-    onChange: v => setKestrel({
-      ...kestrel,
-      H: v
-    }),
-    kbd: "decimal"
-  }), /*#__PURE__*/React.createElement(Champ, {
-    label: "PRESSION (hPa)",
-    value: kestrel.P,
-    onChange: v => setKestrel({
-      ...kestrel,
-      P: v
-    }),
-    kbd: "decimal"
-  })), /*#__PURE__*/React.createElement(Btn, {
-    kind: "amber",
-    className: "w-full py-3",
-    disabled: !kestrel.T || !kestrel.H || !kestrel.P,
-    onClick: () => {
-      setReg({
-        ...reg,
-        tir: {
-          ...tir,
-          T: kestrel.T,
-          H: kestrel.H,
-          P: kestrel.P,
-          provMeteo: "Kestrel (saisie)",
-          tMeteo: nowTxt()
-        }
-      });
-      setVoile(null);
-    }
-  }, "APPLIQUER LE RELEV\xC9 KESTREL")) : /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
     className: "text-[11px] text-slate-400 mb-2"
   }, "Relev\xE9 Open-Meteo au point de la position (latitude et longitude requises, GPS ou saisie). D\xE9clar\xE9, jamais mesur\xE9 ici : provenance \xAB web (Open-Meteo, d\xE9clar\xE9) \xBB. Le vent mod\xE8le \xE0 10 m reste une information, jamais la zone de tir."), /*#__PURE__*/React.createElement(Btn, {
     kind: "amber",
@@ -1726,7 +1679,7 @@ function Tir({
     className: "text-[11px] mt-2 " + (webMsg.indexOf("relevé appliqué") === 0 ? "text-emerald-300" : webMsg === "RELEVÉ EN COURS…" ? "text-slate-400" : "text-amber-300")
   }, webMsg)), /*#__PURE__*/React.createElement("div", {
     className: "text-[10px] text-slate-500 mt-3"
-  }, "3 \xB7 MANUEL : taper la valeur directement dans l'encart M\xC9T\xC9O de la page (provenance \xAB manuel (saisie) \xBB). Les trois provenances ne se confondent jamais : chaque geste \xE9crit la sienne.")), (voile === "cap" || voile === "site") && /*#__PURE__*/React.createElement(Voile, {
+  }, "MANUEL : taper la valeur directement dans l'encart M\xC9T\xC9O de la page (provenance \xAB manuel (saisie) \xBB). Les deux provenances ne se confondent jamais : chaque geste \xE9crit la sienne.")), (voile === "cap" || voile === "site") && /*#__PURE__*/React.createElement(Voile, {
     titre: voile === "cap" ? "BOUSSOLE · AZIMUT DU TIR" : "INCLINOMÈTRE · ANGLE DE SITE",
     onClose: () => setVoile(null)
   }, /*#__PURE__*/React.createElement("div", {
@@ -1752,7 +1705,9 @@ function Tir({
     onClick: () => setVoile(null)
   }, "FERMER SANS RIEN CHANGER")));
 }
+
 // ---------- l'app ----------
+
 function App() {
   const [debut] = useState(charge);
   const [reg, setReg] = useState(debut.reg);
@@ -1819,6 +1774,7 @@ function App() {
 }
 const { useState, useEffect, useMemo } = React;
 ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
+</script>
 </script>
 <script>
 if ("serviceWorker" in navigator) {

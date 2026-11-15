@@ -1,16 +1,17 @@
-# Pythie Lite · app autonome (v0.4)
+# Pythie Lite · app autonome (v0.4.1)
 
-Build : 2026-11-15. Source de vérité : le canvas pythie-lite-v01 (v0.4),
+Build : 2026-11-15. Source de vérité : le canvas pythie-lite-v01 (v0.4.1),
 compilé sans modification du code (Babel JSX classique, React 18 UMD inline,
 Tailwind 3.4 compilé au build, aucune dépendance au réseau ni au CDN).
-Validation du build standalone : 35 PASS, 0 échec (moteur .308 V0 790 / BC G7 0,243
+Validation du build standalone : 43 PASS, 0 échec (moteur .308 V0 790 / BC G7 0,243
 / zéro 200 m : 15,6 MOA et 521 m/s à 600 m ; 39,3 MOA, 376 m/s, ToF 1,84 s, Mach 1,10
 à 1000 m ; zéro 50 m : zéro exact à 50 m, 2,3 mrad à 300 m ; site +20° : gravité
 apparente ; vent travers 4 m/s à 600 m = 1,17 mrad, moteur et règle du retard
 d'accord ; Coriolis 48,5°N tir à l'est = 0,05 mrad, balle à droite correction à
 gauche ; boussole iOS/Android/non absolu, inclinomètre montant/descendant/sans
 capteur ; ordre page TIR localisation < site < météo ; zéro au setup dès 50 m,
-schéma v3, migration déclarée v2 → v3, plus aucun zéro global).
+schéma v3, migration déclarée v2 → v3, plus aucun zéro global ; v0.4.1 : plus
+aucune notion Kestrel, météo aux deux provenances web déclaré / manuel saisie).
 
 ## Périmètre (doctrine)
 - Pythie Lite calcule au doigt, théorique et autoporté : aucune file, aucun
@@ -30,6 +31,12 @@ schéma v3, migration déclarée v2 → v3, plus aucun zéro global).
 - La page TIR calcule en mrad RELATIFS AU ZÉRO DU SETUP ACTIF ; la carte
   correction le dit, la garde le rappelle.
 - Les PARAMÈTRES ne règlent plus aucun zéro global : la carte renvoie au setup.
+
+## La météo aux deux provenances (v0.4.1)
+- Plus de notion Kestrel (demande du tireur) : la voile ACQUISITION MÉTÉO ne
+  garde que le relevé Open-Meteo (déclaré) ; la saisie T/P/H se tape au doigt
+  dans l'encart MÉTÉO (provenance « manuel (saisie) »).
+- Les deux provenances ne se confondent jamais : chaque geste écrit la sienne.
 
 ## Déploiement (GitHub Pages)
 Déjà fait : le dossier lite/ de ce dépôt, servi à .../Oracle/lite/.
