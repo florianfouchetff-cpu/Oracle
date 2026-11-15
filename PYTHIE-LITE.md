@@ -1,9 +1,9 @@
-# Pythie Lite · app autonome (v0.4.1)
+# Pythie Lite · app autonome (v0.4.2)
 
-Build : 2026-11-15. Source de vérité : le canvas pythie-lite-v01 (v0.4.1),
+Build : 2026-11-15. Source de vérité : le canvas pythie-lite-v01 (v0.4.2),
 compilé sans modification du code (Babel JSX classique, React 18 UMD inline,
 Tailwind 3.4 compilé au build, aucune dépendance au réseau ni au CDN).
-Validation du build standalone : 43 PASS, 0 échec (moteur .308 V0 790 / BC G7 0,243
+Validation du build standalone : 46 PASS, 0 échec (moteur .308 V0 790 / BC G7 0,243
 / zéro 200 m : 15,6 MOA et 521 m/s à 600 m ; 39,3 MOA, 376 m/s, ToF 1,84 s, Mach 1,10
 à 1000 m ; zéro 50 m : zéro exact à 50 m, 2,3 mrad à 300 m ; site +20° : gravité
 apparente ; vent travers 4 m/s à 600 m = 1,17 mrad, moteur et règle du retard
@@ -64,3 +64,10 @@ Recompiler depuis le canvas (JSX -> createElement, React UMD + Tailwind au build
 mettre à jour lite/index.html et lite/sw.js. Le sceau (empreinte du shell, inscrite
 dans sw.js) fait le reste : tout changement du shell réinstalle le worker chez le
 tireur et rafraîchit le cache, rien à faire d'autre.
+
+## Page TIR et bandeaux (v0.4.2)
+- L'encart CORRECTION passe au-dessus de la rosace des vents : la page se lit
+  correction, rosace, localisation, angle de site, météo, carte 100-1200 m.
+- Plus de bandeau de migration v0.4 (demande du tireur : appli finale). La
+  conversion v2 → v3 reste au chargement, registres préservés ; les refus
+  honnêtes (version inconnue, entrées v0.1) restent dits.

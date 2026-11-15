@@ -1,6 +1,6 @@
 <!doctype html>
-<!-- Pythie Lite v0.4.1 · build 2026-11-15 · standalone offline-first -->
-<!-- Source de vérité : le canvas pythie-lite-v01 (v0.4.1), compilé sans modification du code -->
+<!-- Pythie Lite v0.4.2 · build 2026-11-15 · standalone offline-first -->
+<!-- Source de vérité : le canvas pythie-lite-v01 (v0.4.2), compilé sans modification du code -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
@@ -318,8 +318,9 @@ function(a,b,c){if(!Vd(b))throw Error(m(200));return Wd(null,a,b,!1,c)};Q.unmoun
 </script>
 <script>
 
+
 // ============================================================
-// PYTHIE LITE v0.4.1 — le calcul au tir, théorique et autoporté
+// PYTHIE LITE v0.4.2 — le calcul au tir, théorique et autoporté
 // Structure Pythie : ACCUEIL (setup, cartouche, paramètres) et
 // page TIR aux conventions maison (rosace, correction en clics
 // + = corriger à droite, acquisition météo aux modes maison,
@@ -329,6 +330,8 @@ function(a,b,c){if(!Vd(b))throw Error(m(200));return Wd(null,a,b,!1,c)};Q.unmoun
 // il se règle à partir de 50 m.
 // v0.4.1 : plus de notion Kestrel — la météo se prend au
 // web (déclaré) ou se tape au doigt dans l'encart (manuel).
+// v0.4.2 : l'encart CORRECTION passe au-dessus de la rosace,
+// plus de bandeau de migration v0.4 (appli finale, décision du tireur).
 // Aucun recours à Delphes, aucun tir archivé, aucune analyse.
 // Moteur : masse ponctulaire, traînée standard via BC (G1/G7),
 // vent 3D, gravité apparente selon le site, Coriolis si lat/az.
@@ -338,7 +341,7 @@ function(a,b,c){if(!Vd(b))throw Error(m(200));return Wd(null,a,b,!1,c)};Q.unmoun
 
 const SCHEMA_V = 3;
 const LS_KEY = "pythieLite";
-const APP_VERSION = "Pythie Lite v0.4.1";
+const APP_VERSION = "Pythie Lite v0.4.2";
 
 // ---------- tables de traînée standard approchées (Cd vs Mach) ----------
 const CD_G1 = [[0, 0.1189], [0.8, 0.1189], [0.86, 0.176], [0.9, 0.224], [0.95, 0.291], [1.0, 0.339], [1.05, 0.372], [1.1, 0.384], [1.2, 0.389], [1.3, 0.384], [1.5, 0.353], [2, 0.282], [2.5, 0.257], [3, 0.237], [4, 0.206], [5, 0.194], [6, 0.19]];
@@ -1462,29 +1465,6 @@ function Tir({
   }, d, " m"))), /*#__PURE__*/React.createElement("div", {
     className: "text-[10px] text-slate-500 mt-1"
   }, tir.v0 ? "V₀ ajustée au doigt (théorique, jamais qualifiée)" : ca ? "V₀ de la cartouche (théorique, ajustable)" : "", " \xB7 z\xE9ro du setup actif ", su && su.zero || "—", " m")), /*#__PURE__*/React.createElement("div", {
-    className: "rounded-xl bg-slate-900 p-4 mb-2 border border-slate-700"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "text-[13px] font-bold text-slate-100 mb-2"
-  }, "ROSACE DES VENTS ", /*#__PURE__*/React.createElement("span", {
-    className: "text-[10px] text-slate-500 font-normal"
-  }, "vue du tireur : 12 h = de face")), /*#__PURE__*/React.createElement(Rose, {
-    h: tir.ventH,
-    ms: num(tir.vent) || 0,
-    onH: h => setT("ventH")(h)
-  }), /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center justify-center gap-2 mt-2"
-  }, /*#__PURE__*/React.createElement(Btn, {
-    kind: "ghost",
-    onClick: () => setT("vent")(String(Math.max(0, (num(tir.vent) || 0) - 0.5)))
-  }, "\u2212 0,5"), /*#__PURE__*/React.createElement(Btn, {
-    kind: "ghost",
-    onClick: () => setT("vent")(String((num(tir.vent) || 0) + 0.5))
-  }, "+ 0,5"), /*#__PURE__*/React.createElement(Btn, {
-    kind: "ghost",
-    onClick: () => setT("vent")("0")
-  }, "0 m/s")), /*#__PURE__*/React.createElement("div", {
-    className: "text-center text-[11px] text-slate-400 mt-1"
-  }, "vent ", fmt(num(tir.vent) || 0, 1), " m/s \xB7 ", dirTxt, " \xB7 travers ", fmt(calc && !calc.err ? calc.ventTravers : null, 1), " m/s \xB7 dans l'axe ", fmt(calc && !calc.err ? calc.ventAxe : null, 1), " m/s")), /*#__PURE__*/React.createElement("div", {
     className: "rounded-xl bg-slate-900 p-4 mb-2 border border-cyan-500/50"
   }, /*#__PURE__*/React.createElement("div", {
     className: "text-[13px] font-bold text-slate-100 mb-2"
@@ -1534,6 +1514,29 @@ function Tir({
   })), calc.mach < 0.9 && /*#__PURE__*/React.createElement("div", {
     className: "text-[10px] text-amber-300 mt-1"
   }, "Transonique \xE0 l'arriv\xE9e : le mod\xE8le y perd sa pr\xE9cision, dit honn\xEAtement (garde maison Mach 0,9).")) : null), /*#__PURE__*/React.createElement("div", {
+    className: "rounded-xl bg-slate-900 p-4 mb-2 border border-slate-700"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "text-[13px] font-bold text-slate-100 mb-2"
+  }, "ROSACE DES VENTS ", /*#__PURE__*/React.createElement("span", {
+    className: "text-[10px] text-slate-500 font-normal"
+  }, "vue du tireur : 12 h = de face")), /*#__PURE__*/React.createElement(Rose, {
+    h: tir.ventH,
+    ms: num(tir.vent) || 0,
+    onH: h => setT("ventH")(h)
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center justify-center gap-2 mt-2"
+  }, /*#__PURE__*/React.createElement(Btn, {
+    kind: "ghost",
+    onClick: () => setT("vent")(String(Math.max(0, (num(tir.vent) || 0) - 0.5)))
+  }, "\u2212 0,5"), /*#__PURE__*/React.createElement(Btn, {
+    kind: "ghost",
+    onClick: () => setT("vent")(String((num(tir.vent) || 0) + 0.5))
+  }, "+ 0,5"), /*#__PURE__*/React.createElement(Btn, {
+    kind: "ghost",
+    onClick: () => setT("vent")("0")
+  }, "0 m/s")), /*#__PURE__*/React.createElement("div", {
+    className: "text-center text-[11px] text-slate-400 mt-1"
+  }, "vent ", fmt(num(tir.vent) || 0, 1), " m/s \xB7 ", dirTxt, " \xB7 travers ", fmt(calc && !calc.err ? calc.ventTravers : null, 1), " m/s \xB7 dans l'axe ", fmt(calc && !calc.err ? calc.ventAxe : null, 1), " m/s")), /*#__PURE__*/React.createElement("div", {
     className: "rounded-xl bg-slate-900 p-4 mb-2 border border-slate-700"
   }, /*#__PURE__*/React.createElement("div", {
     className: "text-[13px] font-bold text-slate-100 mb-2"
@@ -1746,9 +1749,7 @@ function App() {
     className: "rounded-xl bg-amber-500/15 border border-amber-500/50 p-3 mb-3 text-[11px] text-amber-300"
   }, "Version de sch\xE9ma inconnue d\xE9tect\xE9e : refus honn\xEAte, registres reconstruits \xE0 neuf, rien n'a \xE9t\xE9 devin\xE9 ni converti."), note === "v0.1" && /*#__PURE__*/React.createElement("div", {
     className: "rounded-xl bg-amber-500/15 border border-amber-500/50 p-3 mb-3 text-[11px] text-amber-300"
-  }, "Entr\xE9es du calculateur v0.1 non converties : elles n'\xE9taient pas des registres, rien n'\xE9tait archiv\xE9, rien n'est perdu. Refus honn\xEAte, registres v0.2 reconstruits \xE0 neuf."), note === "v2" && /*#__PURE__*/React.createElement("div", {
-    className: "rounded-xl bg-amber-500/15 border border-amber-500/50 p-3 mb-3 text-[11px] text-amber-300"
-  }, "Migration v0.4, dite honn\xEAtement : le z\xE9ro global de la version pr\xE9c\xE9dente devient le z\xE9ro de chaque setup (tous en d\xE9pendaient de toute fa\xE7on), rien d'autre ne change. Le z\xE9ro se r\xE8gle d\xE9sormais \xE0 la page SETUP, \xE0 partir de 50 m."), ecran !== "accueil" && /*#__PURE__*/React.createElement("button", {
+  }, "Entr\xE9es du calculateur v0.1 non converties : elles n'\xE9taient pas des registres, rien n'\xE9tait archiv\xE9, rien n'est perdu. Refus honn\xEAte, registres v0.2 reconstruits \xE0 neuf."), ecran !== "accueil" && /*#__PURE__*/React.createElement("button", {
     onClick: () => setEcran("accueil"),
     className: "w-full text-left rounded-xl bg-slate-900 p-3 mb-2 border border-slate-700 text-[11px] text-slate-400"
   }, "\u2190 ACCUEIL"), ecran === "accueil" && /*#__PURE__*/React.createElement(Accueil, {
@@ -1774,6 +1775,7 @@ function App() {
 }
 const { useState, useEffect, useMemo } = React;
 ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
+</script>
 </script>
 </script>
 <script>
