@@ -1,8 +1,8 @@
-# Pythie · app autonome (v0.89)
+# Pythie · app autonome (v0.90)
 
-Build : 2026-11-14. Source de vérité : le canvas pythie-boucle-v0 (v0.89),
+Build : 2026-11-15. Source de vérité : le canvas pythie-boucle-v0 (v0.90),
 compilé par build_standalone.py (jsx_harness + adaptateur React + Tailwind au build).
-Validation du canvas source : B6 107, 91 suites 2367 PASS, 12 scénarios, 57 sondes/diag zéro échec (rejeu 2026-11-14).
+Validation du canvas source : B6 107, 92 suites 2393 PASS, 12 scénarios, 58 sondes/diag zéro échec (rejeu 2026-11-15).
 
 ## Déploiement (GitHub Pages)
 1. Créer le dépôt (privé ou public, au choix du tireur) et pousser le contenu de dist/.
